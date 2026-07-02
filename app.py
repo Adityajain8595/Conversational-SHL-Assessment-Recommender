@@ -3,6 +3,7 @@ import os
 import json
 from dotenv import load_dotenv
 from fastapi import FastAPI, status
+from fastapi.responses import RedirectResponse
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langchain_groq import ChatGroq
 from models import ChatRequest, ChatResponse, RecItem, IntentRouting
@@ -22,6 +23,11 @@ structured_llm = llm.with_structured_output(IntentRouting)
 
 # FastAPI app instance
 app = FastAPI(title="SHL Conversational Assessment Recommender API")
+
+# Automatic redirect
+@app.get("/")
+def read_root():  
+    return RedirectResponse(url="/docs")
 
 # Initialize the FAISS index on startup
 @app.on_event("startup")
